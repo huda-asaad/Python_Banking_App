@@ -35,6 +35,9 @@ class Add_new_customer:
         self.balance_checking = float(balance_checking)
         self.balance_savings = float(balance_savings)
         
+          ###  ــــ show the balance ــــــ 
+    def balance_checking():
+        print(f"Your balance = {balance_checking}")
 
    
     def save_to_csv(self):
@@ -51,6 +54,8 @@ class Add_new_customer:
                 if row["account_id"] == account_id:
                     return Add_new_customer(row["first_name"], row["last_name"], row["password"], row["balance_checking"], row["balance_savings"], row["status"])
         return None
+    
+  
 
 create_customer_file()  
 
@@ -77,13 +82,51 @@ class Login:
                     self.logged_in_user = row  
                     return True  
         return False  
-# class Withdraw:
-#    def __init__(self, amount):
-#     if 0 < amount <= self.balancce
-#      self.blance = self.balance - amount
-#     else:
-#         print("the amount must be greater than 0 and less than or equal to the balance")
+class Withdraw:
+   def __init__(self, amount, balance):
+     if 0 < amount <= balance:
+      self.nwe_balance = balance - amount
+      print("withdrae successfully")
+     else:
+        print("the amount must be greater than 0 and less than or equal to the balance")       
+
+account_id = input ("Enter Your ID: ")
+password = input ("Enter the password: ")
+if account_id == account_id:
+ password == password
+ print("ENTER successfully")
+
+else:
+    print("Enter Number correct")
 
 
  
+class Deposit:
+    def __init__(self, amount):
+        self.balance = self.balance + amount
+        amount = float(input("venter amount deposit "))
+
+        if amount < 0:
+            print(" that is not a valid amount")
+        else:
+            return amount
+
+
+is_running = True
+
+while is_running:
+   print("Welcome to in the Bank App")
+   print("1. Login")
+   print("2. show balance. ")
+   print("3. show savings account. ")
+   print("4. Withdraw. ")
+   print("5. Deposit. ")
+   print("6.Exit. ")
+
+choice = input ("Enter your choice (1-6): ")
+if choice  == '1':
+    Login()
+    
 create_customer_file()  
+bank = Add_new_customer()
+
