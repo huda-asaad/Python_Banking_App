@@ -11,6 +11,7 @@ def create_customer_file():
             print("Customer data file created")
 
 def generate_account_id():
+    
     max_id = 10000  
     try:
         with open(FILE_NAME, mode='r') as file:
@@ -44,10 +45,10 @@ class Info:
     def __init__(self, account_id, password):
         self.account_id = account_id
         self.password = password
-        self.first_name = []
-        self.last_name = []
-        self.balance_checking = [0.0]
-        self.balance_savings = [0.0]
+        self.first_name = ""
+        self.last_name = ""
+        self.balance_checking = 0.0
+        self.balance_savings = 0.0
 
     def load_customer_info(self):
         if not os.path.exists(FILE_NAME):
@@ -55,35 +56,40 @@ class Info:
             return False
 
         try:
-            with open(FILE_NAME, mode="r", encoding="utf-8") as file:
-                reader = csv.DictReader(file, delimiter=";")
+            with open(FILE_NAME, mode="r") as file:
+                reader = csv.reader(file, delimiter=';')
 
-                found = False 
+                found = False
                 
-                for row in reader:
-                    print(f" Checking: {row}")  
-
-                    if "account_id" not in row or "password" not in row:
-                        print("this ...")
-                        return False
+                for index, row in enumerate(reader):
+                    print(f"Checking: {row}")  
                     
-                    if row["account_id"].strip() == self.account_id.strip() and row["password"].strip() == self.password.strip():
-                        self.first_name = row["first_name"]
-                        self.last_name = row["last_name"]
-                        self.balance_checking = float(row["balance_checking"])
-                        self.balance_savings = float(row["balance_savings"])
+                    if index == 0:
+                        continue  
+
+                    if len(row) < 6:
+                        continue
+                    
+                    if row[0] == self.account_id and row[3] == self.password:
+                        self.first_name = row[1]
+                        self.last_name = row[2]
+                        self.balance_checking = float(row[4])
+                        self.balance_savings = float(row[5])
                         found = True
                         break  
+                
                 if found:
                     print(f"Welcome {self.first_name} {self.last_name}!")
                     return True
                 else:
-                    print(" The account does not exist, or the password is incorrect.")
+                    print("The account does not exist, or the password is incorrect.")
                     return False
 
         except Exception as e:
-            print(f" Error reading the file: {e}")
+            print(f"Error reading the file: {e}")
             return False
+
+
 
 # هناا
 class Withdraw:
@@ -285,10 +291,11 @@ while is_running:
             print("\n===== Your Bank Information =====")
             print(f" Account ID: {customer.account_id}")
             print(f" Name: {customer.first_name} {customer.last_name}")
-            print(f"Checking Account Balance: ${customer.balance_checking}")
-            print(f"Savings Account Balance: ${customer.balance_savings}")
+            print(f" Checking Account Balance: ${customer.balance_checking}")
+            print(f" Savings Account Balance: ${customer.balance_savings}")
         else:
             print("\nThe account does not exist, or the password is incorrect. Please check and try again.")
+
 
 
     elif choice == '6':  
