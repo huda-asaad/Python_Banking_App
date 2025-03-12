@@ -40,14 +40,14 @@ class Add_new_customer:
 
 
 
-class Login:
+class Info:
     def __init__(self, account_id, password):
         self.account_id = account_id
         self.password = password
-        self.first_name = None
-        self.last_name = None
-        self.balance_checking = 0.0
-        self.balance_savings = 0.0
+        self.first_name = []
+        self.last_name = []
+        self.balance_checking = [0.0]
+        self.balance_savings = [0.0]
 
     def load_customer_info(self):
         if not os.path.exists(FILE_NAME):
@@ -279,7 +279,7 @@ while is_running:
         account_id = input("Enter your ID: ")
         password = input("Enter your password: ")
 
-        customer = Login(account_id, password)  
+        customer = Info(account_id, password)  
 
         if customer.load_customer_info():
             print("\n===== Your Bank Information =====")
