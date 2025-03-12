@@ -64,7 +64,7 @@ class Login:
                     print(f" Checking: {row}")  
 
                     if "account_id" not in row or "password" not in row:
-                        print("⚠️ ملف CSV لا يحتوي على الأعمدة الصحيحة!")
+                        print("this ...")
                         return False
                     
                     if row["account_id"].strip() == self.account_id.strip() and row["password"].strip() == self.password.strip():
