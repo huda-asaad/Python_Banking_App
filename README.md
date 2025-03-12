@@ -15,11 +15,11 @@
 
 | Feature                 | Description |
 |-------------------------|-------------|
- |**Register New Account** | Users can create a new account with a unique ID. |
- |**Deposit Money** | Add money to checking or savings accounts. |
- |**Withdraw Money** | Withdraw funds while handling overdraft scenarios. |
- |**Transfer Funds** | Send money between accounts securely. |
- |**Check Account Details** | View account balance and personal details. |
+|**Register New Account** | Users can create a new account with a unique ID. |
+|**Deposit Money** | Add money to checking or savings accounts. |
+|**Withdraw Money** | Withdraw funds while handling overdraft scenarios. |
+|**Transfer Funds** | Send money between accounts securely. |
+|**Check Account Details** | View account balance and personal details. |
 
 
 
@@ -38,7 +38,7 @@
 
 
 # Challenges / Key Takeaways From Experience
-    💠 Money Transfer & Overdraft Handling: Ensuring smooth fund transfers while managing overdraft scenarios and preventing          excessive withdrawals.
+    💠 Money Transfer & Overdraft Handling: Ensuring smooth fund transfers while managing overdraft scenarios and preventing excessive withdrawals.
 
     💠 CSV File Integration: While working with CSV wasn’t difficult, linking certain data fields correctly caused unexpected errors.
 

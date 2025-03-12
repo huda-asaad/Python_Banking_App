@@ -7,26 +7,25 @@ def create_customer_file():
     if not os.path.exists(FILE_NAME):
         with open(FILE_NAME, mode='w', newline='') as file:
             writer = csv.writer(file, delimiter=';')
-            writer.writerow(["account_id", "first_name", "last_name", "password", "balance_checking", "balance_savings"])
+            writer.writerow(["account_id", "first_name", "last_name", "password", "balance_checking", "balance_savings", "overdraft_count", "account_status"])
             print("Customer data file created")
 
 def generate_account_id():
-    
-    max_id = 10000  
+    max_id = 10000
     try:
         with open(FILE_NAME, mode='r') as file:
             reader = csv.reader(file, delimiter=';')
             next(reader) 
             for row in reader:
                 if len(row) > 0 and row[0].isdigit():
-                    max_id = max(max_id, int(row[0]))  
+                    max_id = max(max_id, int(row[0]))
     except (FileNotFoundError, ValueError):
-        pass  
+        pass
     return str(max_id + 1)
 
 class Add_new_customer:
     def __init__(self, first_name, last_name, password, balance_checking=0.0, balance_savings=0.0):
-        self.account_id = generate_account_id() 
+        self.account_id = generate_account_id()
         self.first_name = first_name
         self.last_name = last_name
         self.password = password
@@ -36,10 +35,7 @@ class Add_new_customer:
     def save_to_csv(self):
         with open(FILE_NAME, mode='a', newline='') as file:
             writer = csv.writer(file, delimiter=';')
-            writer.writerow([self.account_id, self.first_name, self.last_name, self.password, self.balance_checking, self.balance_savings])
-
-
-
+            writer.writerow([self.account_id, self.first_name, self.last_name, self.password, self.balance_checking, self.balance_savings, 0, "active"])
 
 class Info:
     def __init__(self, account_id, password):
@@ -54,44 +50,35 @@ class Info:
         if not os.path.exists(FILE_NAME):
             print("Customer file not found!")
             return False
-
         try:
             with open(FILE_NAME, mode="r") as file:
                 reader = csv.reader(file, delimiter=';')
-
                 found = False
-                
                 for index, row in enumerate(reader):
-                    print(f"Checking: {row}")  
-                    
                     if index == 0:
-                        continue  
-
+                        continue  # تخطي العنوان
                     if len(row) < 6:
                         continue
-                    
                     if row[0] == self.account_id and row[3] == self.password:
                         self.first_name = row[1]
                         self.last_name = row[2]
                         self.balance_checking = float(row[4])
                         self.balance_savings = float(row[5])
                         found = True
-                        break  
-                
+                        break
                 if found:
                     print(f"Welcome {self.first_name} {self.last_name}!")
                     return True
                 else:
                     print("The account does not exist, or the password is incorrect.")
                     return False
-
         except Exception as e:
             print(f"Error reading the file: {e}")
             return False
 
 
 
-# هناا
+
 class Withdraw:
     def __init__(self, account_id, password, amount, account_type="checking"):
         self.account_id = account_id
@@ -110,49 +97,40 @@ class Withdraw:
             reader = csv.reader(file, delimiter=';')
             accounts = list(reader)
 
-        for i, row in enumerate(accounts[1:]): 
-            if len(row) < 5: 
+        for i, row in enumerate(accounts[1:]):  
+            if len(row) < 8:  
                 print(f"Warning: Skipping invalid row {row}")
-                continue  
+                continue
 
             if row[0] == self.account_id and row[3] == self.password:
-                balance_index = 4 if self.account_type == "checking" else 5
-                
-                try:
-                    current_balance = float(row[balance_index])  
-                except ValueError:
-                    print(f"Error: Invalid balance value in row {row}. Skipping transaction.")
-                    return
+                balance_index = 4 if self.account_type == "checking" else 5  
+                current_balance = float(row[balance_index])
 
-                while len(row) < 7:
-                    row.append("0")  
-                
                 overdraft_count = int(row[6])  
-                account_status = row[7] if len(row) > 7 else "active"  
+                account_status = row[7] if len(row) > 7 else "active" 
 
                 if account_status == "deactivated":
                     print("Your account has been deactivated due to excessive overdrafts.")
-                    return 
-                
+                    return
+
                 new_balance = current_balance - self.amount
-                
+
                 if new_balance < 0:
-                    if current_balance <= overdraft_limit:
+                    if new_balance < overdraft_limit:
                         print(f"Your account cannot be overdrawn by more than {overdraft_limit} USD.")
                         return
                     else:
-                        row[balance_index] = str(new_balance - overdraft_fee)
+                        new_balance -= overdraft_fee
                         overdraft_count += 1
                         row[6] = str(overdraft_count)  
                         print(f"Overdraft detected! A fee of {overdraft_fee} USD has been deducted.")
-                        
+
                         if overdraft_count >= 2:
-                            row[7] = "deactivated"  
+                            row[7] = "deactivated"
                             print("Your account has been deactivated due to excessive overdrafts.")
                             return
-                else:
-                    row[balance_index] = str(new_balance)
-                
+
+                row[balance_index] = str(new_balance)
                 found = True
                 print(f"Withdrawal successful! New balance in {self.account_type} account: {row[balance_index]}")
                 accounts[i + 1] = row  
@@ -286,7 +264,6 @@ while is_running:
         password = input("Enter your password: ")
 
         customer = Info(account_id, password)  
-
         if customer.load_customer_info():
             print("\n===== Your Bank Information =====")
             print(f" Account ID: {customer.account_id}")
@@ -296,20 +273,9 @@ while is_running:
         else:
             print("\nThe account does not exist, or the password is incorrect. Please check and try again.")
 
-
-
     elif choice == '6':  
         is_running = False
         print("Thank you for using the Bank App!")  
 
     else:
         print("Invalid choice! Please enter a number between 1 and 6.")
-
-
-
-
-        
-
-
-
-
