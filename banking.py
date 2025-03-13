@@ -1,6 +1,6 @@
 import csv
 import os
-
+#============================== csv  ===================================#
 FILE_NAME = "bank.csv"
 
 def create_customer_file():
@@ -9,7 +9,7 @@ def create_customer_file():
             writer = csv.writer(file, delimiter=';')
             writer.writerow(["account_id", "first_name", "last_name", "password", "balance_checking", "balance_savings", "overdraft_count", "account_status"])
             print("Customer data file created")
-
+#============================== generate_account_id  ===================================#
 def generate_account_id():
     max_id = 10000
     try:
@@ -22,7 +22,7 @@ def generate_account_id():
     except (FileNotFoundError, ValueError):
         pass
     return str(max_id + 1)
-
+#============================== Add_new_customer  ===================================#
 class Add_new_customer:
     def __init__(self, first_name, last_name, password, balance_checking=0.0, balance_savings=0.0):
         self.account_id = generate_account_id()
@@ -37,6 +37,7 @@ class Add_new_customer:
             writer = csv.writer(file, delimiter=';')
             writer.writerow([self.account_id, self.first_name, self.last_name, self.password, self.balance_checking, self.balance_savings, 0, "active"])
 
+ #============================== Info  ===================================#
 class Info:
     def __init__(self, account_id, password):
         self.account_id = account_id
@@ -75,10 +76,7 @@ class Info:
         except Exception as e:
             print(f"Error reading the file: {e}")
             return False
-
-
-
-
+#============================== Withdraw ===================================#
 class Withdraw:
     def __init__(self, account_id, password, amount, account_type="checking"):
         self.account_id = account_id
@@ -143,7 +141,7 @@ class Withdraw:
         else:
             print("Account not found or incorrect password!")
 
-
+#============================== Deposit  ===================================#
 class Deposit:
     def __init__(self, account_id, password, amount, account_type="checking"):
         self.account_id = account_id
@@ -172,7 +170,7 @@ class Deposit:
                 writer.writerows(accounts)
         else:
             print("Account not found or incorrect password!")
-
+#============================== Transfer  ===================================#
 class Transfer:
     def __init__(self, from_account, password, to_account, amount, from_account_type="checking"):
         self.from_account = from_account
@@ -214,7 +212,7 @@ class Transfer:
             print("Transfer failed! Check your credentials and balance.")
 
 create_customer_file()
-
+#============================== running & choice  ===================================#
 is_running = True
 while is_running:
     print("\n===== Welcome to the Bank App =====")
